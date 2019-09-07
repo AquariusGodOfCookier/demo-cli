@@ -34,5 +34,5 @@ app.get('/a/',(res)=>{
     res.send('so cool anything with an "a" in it')
 })
 app.listen(3500,()=>{
-    console.log('listening on port 3000');
+    console.log('listening on port 3500');
 })
