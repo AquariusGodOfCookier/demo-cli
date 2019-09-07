@@ -1,5 +1,5 @@
 {
-  "name": "my-cli",
+  "name": "dong.sun-first-cli",
   "version": "1.0.0",
   "description": "my cli",
   "main": "index.js",
@@ -10,7 +10,7 @@
   "author": "dong.sun",
   "license": "ISC",
   "bin": {
-    "my-cli": "./entry.js"
+    "dong.sun-cli": "./entry.js"
   },
   "dependencies": {
     "express": "^4.17.1",

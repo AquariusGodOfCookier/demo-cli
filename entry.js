@@ -1,5 +1,4 @@
 #! /usr/bin/env node
-console.log('yes');
 const fs = require('fs');
 const path = require('path');
 const processPath = process.cwd();
