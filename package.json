@@ -1,0 +1,21 @@
+{
+  "name": "my-cli",
+  "version": "1.0.0",
+  "description": "my cli",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node ./template/server/index.js"
+  },
+  "author": "dong.sun",
+  "license": "ISC",
+  "bin": {
+    "my-cli": "./entry.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "path": "",
+    "body-parser": ""
+  }
+}
