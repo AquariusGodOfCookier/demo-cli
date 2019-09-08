@@ -1,38 +1,52 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
-app.use(express.static('/template/client'))
-app.get('/',(req,res)=>{
-    res.send('hello world');
-})
-app.post('/',(req,res)=>{
-    res.send('a post request')
-})
-app.put('/',(req,res)=>{
-    res.send('a put request')
-})
-app.delete('/',(req,res)=>{
-    res.send('a delete request')
-})
-
-app.get('/demo',(req,res)=>{
-    res.send('demo page')
-})
-app.get('/ab?cd',(req,res)=>{
-    res.send('so cool abcd acd')
-})
-app.get('/ab+cd',(req,res)=>{
-    res.send('so cool abcd,abbcd,abbbcd,abbbbcd and so on')
-})
-app.get('/ab*cd',(req,res)=>{
-    res.send('so cool abcd,abxcd,absadasdasdcd,ab123cd and so on')
-})
-app.get('/ab(cd)?e',(res)=>{
-    res.sned('so cool /abe or /abcde')
-})
-app.get('/a/',(res)=>{
-    res.send('so cool anything with an "a" in it')
-})
-app.listen(3500,()=>{
-    console.log('listening on port 3500');
-})
+const path = require('path');
+const routerConifg = require('../server/router/router.config');
+const resultList = new Map();
+const apiList = require('../server/api/index');
+function isHaveSon(value) {
+    const key = Object.keys(value);
+    if (key.length == 1) {
+        if (key[0].indexOf('/') == -1) {
+            return false
+        } else {
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+function getSonKeyValue(key, value) {
+    if (isHaveSon(value)) {
+        Object.entries(value).forEach(item => {
+            getSonKeyValue(key + item[0], item[1])
+        })
+    } else {
+        resultList.set(key, value)
+    }
+}
+async function start() {
+    const app = express();
+    //app.use(express.static('/template/client'));
+    app.use(express.static('template'))
+    Object.entries(routerConifg).forEach(item => {
+        getSonKeyValue(item[0], item[1]);
+    })
+    app.get('/', function (req, res) {
+        res.sendFile(
+            path.resolve('./template/client/page/index.html')
+        )
+    })
+    for (let i of resultList) {
+        app.get(i[0], function (req, res) {
+            res.sendFile(
+                path.resolve(`./template/client/page${i[0]}/index.html`)
+            )
+        })
+    }
+    app.use('/api',apiList)
+    app.listen(3500, function () {
+        console.log('run 3500')
+    })
+}
+start();

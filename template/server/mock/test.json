@@ -1,0 +1,15 @@
+{
+    "data":{
+        "result_code":"success",
+        "list":[
+            {
+                "username":"sd",
+                "love":"no_body"
+            },
+            {
+                "username":"little_boy",
+                "love":"any_body"
+            }
+        ]
+    }
+}

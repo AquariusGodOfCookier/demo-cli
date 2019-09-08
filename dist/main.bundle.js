@@ -3346,6 +3346,28 @@ eval("/*!\n * vary\n * Copyright(c) 2014-2017 Douglas Christopher Wilson\n * MIT
 
 /***/ }),
 
+/***/ "./template/server/api/demo/index.js":
+/*!*******************************************!*\
+  !*** ./template/server/api/demo/index.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const express = __webpack_require__(/*! express */ \"./node_modules/express/index.js\");\nconst router = express.Router();\nrouter.get('/demo/table', (req, res) => {\n    res.send('this is demo table')\n})\nrouter.get('/demo/test',(req,res)=>{\n    res.send('this is demo test get')\n})\nmodule.exports = router;\n\n//# sourceURL=webpack:///./template/server/api/demo/index.js?");
+
+/***/ }),
+
+/***/ "./template/server/api/index.js":
+/*!**************************************!*\
+  !*** ./template/server/api/index.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const path = __webpack_require__(/*! path */ \"../../../../../usr/local/node_global/lib/node_modules/webpack/node_modules/path-browserify/index.js\");\nconst demoRouter = __webpack_require__(/*! ../api/demo/index */ \"./template/server/api/demo/index.js\");\n\nmodule.exports=[demoRouter]\n\n//# sourceURL=webpack:///./template/server/api/index.js?");
+
+/***/ }),
+
 /***/ "./template/server/index.js":
 /*!**********************************!*\
   !*** ./template/server/index.js ***!
@@ -3353,7 +3375,18 @@ eval("/*!\n * vary\n * Copyright(c) 2014-2017 Douglas Christopher Wilson\n * MIT
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const express = __webpack_require__(/*! express */ \"./node_modules/express/index.js\");\nconst bodyParser = __webpack_require__(/*! body-parser */ \"./node_modules/body-parser/index.js\");\nconst app = express();\napp.use(express.static('/template/client'))\napp.get('/',(req,res)=>{\n    res.send('hello world');\n})\napp.post('/',(req,res)=>{\n    res.send('a post request')\n})\napp.put('/',(req,res)=>{\n    res.send('a put request')\n})\napp.delete('/',(req,res)=>{\n    res.send('a delete request')\n})\n\napp.get('/demo',(req,res)=>{\n    res.send('demo page')\n})\napp.get('/ab?cd',(req,res)=>{\n    res.send('so cool abcd acd')\n})\napp.get('/ab+cd',(req,res)=>{\n    res.send('so cool abcd,abbcd,abbbcd,abbbbcd and so on')\n})\napp.get('/ab*cd',(req,res)=>{\n    res.send('so cool abcd,abxcd,absadasdasdcd,ab123cd and so on')\n})\napp.get('/ab(cd)?e',(res)=>{\n    res.sned('so cool /abe or /abcde')\n})\napp.get('/a/',(res)=>{\n    res.send('so cool anything with an \"a\" in it')\n})\napp.listen(3000,()=>{\n    console.log('listening on port 3000');\n})\n\n//# sourceURL=webpack:///./template/server/index.js?");
+eval("const express = __webpack_require__(/*! express */ \"./node_modules/express/index.js\");\nconst bodyParser = __webpack_require__(/*! body-parser */ \"./node_modules/body-parser/index.js\");\nconst path = __webpack_require__(/*! path */ \"../../../../../usr/local/node_global/lib/node_modules/webpack/node_modules/path-browserify/index.js\");\nconst routerConifg = __webpack_require__(/*! ../server/router/router.config */ \"./template/server/router/router.config.js\");\nconst resultList = new Map();\nconst apiList = __webpack_require__(/*! ../server/api/index */ \"./template/server/api/index.js\");\nfunction isHaveSon(value) {\n    const key = Object.keys(value);\n    if (key.length == 1) {\n        if (key[0].indexOf('/') == -1) {\n            return false\n        } else {\n            return true;\n        }\n    } else {\n        return true;\n    }\n}\nfunction getSonKeyValue(key, value) {\n    if (isHaveSon(value)) {\n        Object.entries(value).forEach(item => {\n            getSonKeyValue(key + item[0], item[1])\n        })\n    } else {\n        resultList.set(key, value)\n    }\n}\nasync function start() {\n    const app = express();\n    //app.use(express.static('/template/client'));\n    app.use(express.static('template'))\n    Object.entries(routerConifg).forEach(item => {\n        getSonKeyValue(item[0], item[1]);\n    })\n    app.get('/', function (req, res) {\n        res.sendFile(\n            path.resolve('./template/client/page/index.html')\n        )\n    })\n    for (let i of resultList) {\n        app.get(i[0], function (req, res) {\n            res.sendFile(\n                path.resolve(`./template/client/page${i[0]}/index.html`)\n            )\n        })\n    }\n    app.use('/api',apiList)\n    app.listen(3500, function () {\n        console.log('run 3500')\n    })\n}\nstart();\n\n\n//# sourceURL=webpack:///./template/server/index.js?");
+
+/***/ }),
+
+/***/ "./template/server/router/router.config.js":
+/*!*************************************************!*\
+  !*** ./template/server/router/router.config.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const path = __webpack_require__(/*! path */ \"../../../../../usr/local/node_global/lib/node_modules/webpack/node_modules/path-browserify/index.js\");\n\nmodule.exports = {\n    '/demo': { label: \"demo\" },\n    '/test': {\n        '/': { label: \"这是测试首页\" },\n        '/edit': { label: '这是test目录下的edit子目录' },\n        '/home': { label: '这是demo目录下的home子目录' },\n    },\n    '/aaa': {\n        '/bbb': { label: '这是bbb' },\n    }\n}\n\n//# sourceURL=webpack:///./template/server/router/router.config.js?");
 
 /***/ }),
 
